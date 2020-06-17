@@ -1,6 +1,7 @@
 sudo: required
 dist: bionic
 language: python
+cache: pip
 before_install:
   - sudo add-apt-repository -y ppa:streetcrypto7/rocksdb
   - sudo apt-get -qq update
@@ -39,10 +40,12 @@ install:
   - pip install cpupower
   - pip install kawpow
 # command to run tests
-script:
-  - pytest --cov=electrumx
-  - pycodestyle --max-line-length=100 electrumx/server/*.py electrumx/lib/*.py *.py
-  - sh -c "cd docs && make html"
+jobs:
+  include:
+  - script: pytest --cov=electrumx
+  - script: pycodestyle --max-line-length=100 electrumx/server/*.py electrumx/lib/*.py *.py
+  - script: sh -c "cd docs && make html"
+
 # Dont report coverage from nightly
 after_success:
   - if [[ $(python3 -V 2>&1) == *"Python 3.7"* ]]; then
