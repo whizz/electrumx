@@ -42,10 +42,12 @@ install:
 # command to run tests
 jobs:
   include:
-  - script: pytest --cov=electrumx
-  - script: pycodestyle --max-line-length=100 electrumx/server/*.py electrumx/lib/*.py *.py
-  - script: sh -c "cd docs && make html"
-
+    - name: coverage
+      script: pytest --cov=electrumx
+    - name: lint
+      script: pycodestyle --max-line-length=100 electrumx/server/*.py electrumx/lib/*.py *.py
+    - name: makedocs
+      script: sh -c "cd docs && make html"
 # Dont report coverage from nightly
 after_success:
   - if [[ $(python3 -V 2>&1) == *"Python 3.7"* ]]; then
